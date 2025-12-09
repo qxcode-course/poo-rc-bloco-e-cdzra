@@ -11,7 +11,7 @@ class Pagamento(ABC):
     
     def validar_valor(self):
         if self.valor <= 0:
-            raise Exception("o valor do pagamento deve ser maior que zero.")
+            raise ValueError("o valor do pagamento deve ser maior que zero.")
         
     @abstractmethod
     def processar(self):
