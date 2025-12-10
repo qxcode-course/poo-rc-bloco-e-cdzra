@@ -1,10 +1,10 @@
 from abc import ABC, abstractmethod
 
 class Veiculo(ABC):
-    def __init__(self, id: str, tipo: str, horaEntrada: int):
+    def __init__(self, id: str, tipo: str):
         self.__id = id
         self.tipo = tipo
-        self.horaEntrada = horaEntrada
+        self.horaEntrada = 0
 
     def setEntrada(self, hora: int):
         self.horaEntrada += hora
@@ -19,7 +19,7 @@ class Veiculo(ABC):
         return self.__id
 
     @abstractmethod
-    def CalcularValor(self, horaSaida: int):
+    def CalcularValor(self, horaSaida: int) -> float:
         pass
 
     def __str__(self):
@@ -31,14 +31,40 @@ class Estacionamento:
         self.hrAtual = 0
 
 class Bike(Veiculo):
-    def __init__(self,id: str, tipo: str, horaEntrada: int):
-        super().__init__(id, tipo, horaEntrada)
+    def __init__(self,id: str):
+        super().__init__(id, "Bike")
 
-    def CalcularValor(self, horaSaida: int):
+    def CalcularValor(self, horaSaida: int) -> float:
+        return 3.0
 
+class Moto(Veiculo):
+    def __init__(self, id: str):
+        super().__init__(id, "Moto")
 
+    def CalcularValor(self, horaSaida: int) -> float:
+        tempo = horaSaida - self.horaEntrada
+        if tempo < 0:
+            tempo = 0
+            return tempo / 20
+        
 class Carro(Veiculo):
-    def __init__(self, id: str, tipo: str, horaEntrada: int):
-        super().__init__(id, tipo, horaEntrada)
+    def __init__(self, id: str):
+        super().__init__(id, "Carro")
 
-    def CalcularValor(self, horaSaida: int):
+    def CalcularValor(self, horaSaida: int) -> float:
+        tempo = horaSaida - self.horaEntrada
+        if tempo < 0:
+            tempo = 0
+            valor = tempo / 10
+            return max(valor, 5.0)
+        
+def main():
+    estac = Estacionamento()
+    while True:
+        line = input()
+        print("$" + line)
+        args = line.split()
+        if args[0] == "end":
+            break
+        elif args[0] == "show":
+            print(estac)
