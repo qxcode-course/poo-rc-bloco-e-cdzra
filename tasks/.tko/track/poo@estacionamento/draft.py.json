@@ -1,0 +1,24 @@
+{
+    "patches": [
+        {
+            "label": "2025-12-10_13-50-14",
+            "content": "@@ -606,125 +606,8 @@\n elf)\n-:%0A        self.veiculo: list%5BVeiculo%5D = %22%22%0A        self.hrAtual = 0%0A%0A    def procurarVeiculo(self, id: str):%0A        \n %0A   \n",
+            "lines": "31"
+        },
+        {
+            "label": "2025-12-10_13-55-54",
+            "content": "@@ -646,10 +646,10 @@\n %5D = \n-%5B%5D\n+%22%22\n %0A   \n@@ -666,12 +666,68 @@\n hrAtual = 0%0A\n+%0A    def procurarVeiculo(self, id: str):%0A        %0A    %0A%0A\n",
+            "lines": "36"
+        },
+        {
+            "label": "2025-12-10_14-00-46",
+            "content": "@@ -91,34 +91,16 @@\n ipo: str\n-, horaEntrada: int\n ):%0A     \n@@ -170,22 +170,17 @@\n rada\n- = horaEntrada\n+: int = 0\n %0A%0A  \n@@ -674,360 +674,4 @@\n = 0%0A\n-%0Aclass Bike(Veiculo):%0A    def __init__(self,id: str, tipo: str, horaEntrada: int):%0A        super().__init__(id, tipo, horaEntrada)%0A%0A    def CalcularValor(self, horaSaida: int):%0A%0A%0Aclass Carro(Veiculo):%0A    def __init__(self, id: str, tipo: str, horaEntrada: int):%0A        super().__init__(id, tipo, horaEntrada)%0A%0A    def CalcularValor(self, horaSaida: int):\n",
+            "lines": "31"
+        },
+        {
+            "label": "2025-12-10_14-22-21",
+            "content": "from abc import ABC, abstractmethod\n\nclass Veiculo(ABC):\n    def __init__(self, id: str, tipo: str, horaEntrada: int):\n        self.__id = id\n        self.tipo = tipo\n        self.horaEntrada = horaEntrada\n\n    def setEntrada(self, hora: int):\n        self.horaEntrada += hora\n\n    def getEntrada(self):\n        return self.horaEntrada\n\n    def getTipo(self):\n        return self.tipo\n    \n    def getId(self):\n        return self.__id\n\n    @abstractmethod\n    def CalcularValor(self, horaSaida: int):\n        pass\n\n    def __str__(self):\n        return f\"{self.__id} : {self.tipo}\"\n    \nclass Estacionamento:\n    def __init__(self):\n        self.veiculo: list[Veiculo] = []\n        self.hrAtual = 0\n\nclass Bike(Veiculo):\n    def __init__(self,id: str, tipo: str, horaEntrada: int):\n        super().__init__(id, tipo, horaEntrada)\n\n    def CalcularValor(self, horaSaida: int):\n\n\nclass Carro(Veiculo):\n    def __init__(self, id: str, tipo: str, horaEntrada: int):\n        super().__init__(id, tipo, horaEntrada)\n\n    def CalcularValor(self, horaSaida: int):",
+            "lines": "44"
+        }
+    ]
+}
