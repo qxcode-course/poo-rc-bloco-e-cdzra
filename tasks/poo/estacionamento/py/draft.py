@@ -30,6 +30,16 @@ class Estacionamento:
         self.veiculo: list[Veiculo] = []
         self.hrAtual = 0
 
+    def procurar(self, id: str):
+        for i, v in enumerate(self.veiculo):
+            if v.getId() == id:
+                return i
+            return -1
+        
+    def estacionar(self, veiculo: Veiculo):
+        veiculo.setEntrada(self.hrAtual)
+        self.veiculo.append(veiculo)
+
 class Bike(Veiculo):
     def __init__(self,id: str):
         super().__init__(id, "Bike")

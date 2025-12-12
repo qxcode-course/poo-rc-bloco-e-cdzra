@@ -1,0 +1,7 @@
+2025-12-12 10:34:30, MOVE, v:1, k:poo@estacionamento, mode:PICK
+2025-12-12 10:34:31, EXEC, v:1, k:poo@estacionamento, mode:FULL, rate:0, size:81
+2025-12-12 10:34:32, MOVE, v:1, k:poo@estacionamento, mode:BACK
+2025-12-12 10:40:38, MOVE, v:1, k:poo@estacionamento, mode:PICK
+2025-12-12 10:40:39, EXEC, v:1, k:poo@estacionamento, mode:FULL, rate:0, size:80
+2025-12-12 10:40:42, EXEC, v:1, k:poo@estacionamento, mode:FREE
+2025-12-12 10:40:44, MOVE, v:1, k:poo@estacionamento, mode:BACK
