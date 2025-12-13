@@ -40,6 +40,31 @@ class Estacionamento:
         veiculo.setEntrada(self.hrAtual)
         self.veiculo.append(veiculo)
 
+    def pagar(self, id: str):
+        pos = self.procurar(id)
+        if pos == -1:
+            print("fail: veiculo nao encontrado")
+            return
+        v = self.veiculo[pos]
+        valor = v.CalcularValor(self.hrAtual)
+        print(f"Valor a pagar: R$ {valor:.2f}")
+
+    def sair(self, id: str):
+        pos = self.procurar(id)
+        if pos == -1:
+            print("fail: veiculo nao encontrado")
+            return
+        v = self.veiculo[pos]
+        valor = v.CalcularValor(self.hrAtual)
+        self.veiculo.pop(pos)
+        print(f"Veículo saiu. Total pago: R$ {valor:.2f}")
+
+    def passarTempo(self, tempo: int):
+        self.hrAtual += tempo
+
+    def __str__(self):
+        
+
 class Bike(Veiculo):
     def __init__(self,id: str):
         super().__init__(id, "Bike")
