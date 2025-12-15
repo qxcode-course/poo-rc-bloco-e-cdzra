@@ -1,105 +1,127 @@
 from abc import ABC, abstractmethod
 
+
 class Veiculo(ABC):
-    def __init__(self, id: str, tipo: str):
-        self.__id = id
+    def __init__(self, id: str, tipo: str, horaEntrada: int):
+        self.id = id
         self.tipo = tipo
-        self.horaEntrada = 0
+        self.horaEntrada = horaEntrada
 
-    def setEntrada(self, hora: int):
-        self.horaEntrada += hora
-
-    def getEntrada(self):
+    def getEntrada(self) -> int:
         return self.horaEntrada
-
-    def getTipo(self):
+    def getTipo(self) -> str:
         return self.tipo
-    
-    def getId(self):
-        return self.__id
+    def getId(self) -> str:
+        return self.id
+
+    def setEntrada(self, hora: int) -> None:
+        self.horaEntrada = hora
 
     @abstractmethod
-    def CalcularValor(self, horaSaida: int) -> float:
+    def calcularValor(self, horaSaida: int):
         pass
 
     def __str__(self):
-        return f"{self.__id} : {self.tipo}"
-    
-class Estacionamento:
-    def __init__(self):
-        self.veiculo: list[Veiculo] = []
-        self.hrAtual = 0
+        id_fmt = self.id.rjust(10, "_")
+        tipo_fmt = self.tipo.rjust(10, "_")
+        return f"{tipo_fmt} : {id_fmt} : {self.horaEntrada}"
 
-    def procurar(self, id: str):
-        for i, v in enumerate(self.veiculo):
-            if v.getId() == id:
-                return i
-            return -1
-        
-    def estacionar(self, veiculo: Veiculo):
-        veiculo.setEntrada(self.hrAtual)
-        self.veiculo.append(veiculo)
-
-    def pagar(self, id: str):
-        pos = self.procurar(id)
-        if pos == -1:
-            print("fail: veiculo nao encontrado")
-            return
-        v = self.veiculo[pos]
-        valor = v.CalcularValor(self.hrAtual)
-        print(f"Valor a pagar: R$ {valor:.2f}")
-
-    def sair(self, id: str):
-        pos = self.procurar(id)
-        if pos == -1:
-            print("fail: veiculo nao encontrado")
-            return
-        v = self.veiculo[pos]
-        valor = v.CalcularValor(self.hrAtual)
-        self.veiculo.pop(pos)
-        print(f"Veículo saiu. Total pago: R$ {valor:.2f}")
-
-    def passarTempo(self, tempo: int):
-        self.hrAtual += tempo
-
-    def __str__(self):
-        
 
 class Bike(Veiculo):
-    def __init__(self,id: str):
-        super().__init__(id, "Bike")
+    def __init__(self, id, horaEntrada: int):
+        super().__init__(id, "Bike", horaEntrada)
 
-    def CalcularValor(self, horaSaida: int) -> float:
-        return 3.0
+    def calcularValor(self, horaSaida: int = 0) -> float:
+        return 3.00
+
 
 class Moto(Veiculo):
-    def __init__(self, id: str):
-        super().__init__(id, "Moto")
+    def __init__(self, id, horaEntrada: int):
+        super().__init__(id, "Moto", horaEntrada)
 
-    def CalcularValor(self, horaSaida: int) -> float:
-        tempo = horaSaida - self.horaEntrada
-        if tempo < 0:
-            tempo = 0
-            return tempo / 20
-        
+    def calcularValor(self, horaSaida: int) -> float:
+        tempo = horaSaida - self.getEntrada()
+        return tempo / 20
+
 class Carro(Veiculo):
-    def __init__(self, id: str):
-        super().__init__(id, "Carro")
+    def __init__(self, id: str, horaEntrada: int):
+        super().__init__(id,"Carro", horaEntrada)
 
-    def CalcularValor(self, horaSaida: int) -> float:
-        tempo = horaSaida - self.horaEntrada
-        if tempo < 0:
-            tempo = 0
-            valor = tempo / 10
-            return max(valor, 5.0)
-        
+    def calcularValor(self, horaSaida: int) -> float:
+        tempo = horaSaida - self.getEntrada()
+        valor = tempo / 10
+        return max(valor, 5.00)
+
+
+class Estacionamento:
+    def __init__(self, horaAtual: int = 0):
+        self.veiculos: list[Veiculo] = []
+        self. horaAtual = horaAtual
+
+    def procucarVeiculo(self, id: str):
+        for veiculos in self.veiculos:
+            if veiculos.id == id:
+                return veiculos
+        return None
+
+
+    def estacionarVeiculo(self, veiculo: Veiculo):
+        self.veiculos.append(veiculo)
+
+    def pagar(self, id: str) -> None:
+        veiculo = self.procucarVeiculo(id)
+
+        if not veiculo:
+            print("veiculo não encontrado")
+            return
+        entrada = veiculo.getEntrada()
+        saida = self.horaAtual
+        valor = veiculo.calcularValor(saida)
+        print(f"{veiculo.getTipo()} chegou {entrada} saiu {saida}. Pagar R$ {valor:.2f}")
+
+
+    def sair(self, id: str):
+        veiculo = self.procucarVeiculo(id)
+        if not veiculo:
+            print("veiculo não encontrado")
+            return
+        valor = veiculo.calcularValor(id)
+        self.veiculos.remove(veiculo)
+        print(f"veiculo: {id} saiu. Valor pago: R$: {valor:.2f}")
+
+    def passarTempo(self, tempo: int) -> None:
+        self.horaAtual += tempo
+
+    def __str__(self):
+        if not self.veiculos:
+            return f"Hora atual: {self.horaAtual}"
+        listVeiculos = "\n".join(str(x) for x in self.veiculos)
+        return f"{listVeiculos}\nHora atual: {self.horaAtual}"
+
 def main():
-    estac = Estacionamento()
+    estacionar = Estacionamento()
+
     while True:
+
         line = input()
         print("$" + line)
-        args = line.split()
+        args = line.split(" ")
+
         if args[0] == "end":
             break
         elif args[0] == "show":
-            print(estac)
+            print(estacionar)
+        elif args[0] == "tempo":
+            estacionar.passarTempo(int(args[1]))
+        elif args[0] == "estacionar":
+            if args[1] == "bike":
+                estacionar.estacionarVeiculo(Bike(args[2], estacionar.horaAtual))
+            if args[1] == "moto":
+                estacionar.estacionarVeiculo(Moto(args[2], estacionar.horaAtual))
+            if args[1] == "carro":
+                estacionar.estacionarVeiculo(Carro(args[2], estacionar.horaAtual))
+        elif args[0] == "pagar":
+            estacionar.pagar(args[1])
+        else:
+            print("fail: comando invalido!!!")
+main()
